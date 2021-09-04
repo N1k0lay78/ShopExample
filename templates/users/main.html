@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block links %}
+<link href="/static/css/main-page.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% for _ in range(4) %}
+    <div class="col-12 col-sm-6 col-md-6 col-lg-4 shop-item">
+        <a class="no-style" href="/item/{{_}}">
+            <div class="shop-item-container">
+                <img class="shop-item-image" src="static/img/item/item2.png" alt="item image">
+                <p class="shop-item-name">название длинное даже очень</p>
+                <p class="shop-item-description">описание товара должно быть здесь</p>
+                <div class="shop-item-nav">
+                    <span>5000p.</span>
+                    <button class="shop-item-buy">Купить</button>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

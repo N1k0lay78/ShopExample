@@ -1,0 +1,40 @@
+.shop-item {
+    margin: calc(var(--bs-gutter-x)/2) 0;
+}
+
+.shop-item-container {
+    border-radius: 20px;
+    padding: 10px;
+    border: 3px solid #dfdfdf;
+}
+
+.shop-item-image {
+    max-width: 100%;
+    border-radius: 15px;
+}
+
+.shop-item-name {
+    font-weight: bold;
+}
+
+.shop-item-description {
+    font-size: 0.8rem;
+}
+
+.shop-item-container p {
+    margin-bottom: 2px;
+}
+
+.shop-item-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shop-item-buy {
+    border-radius: 15px;
+    padding: 6px 15px;
+    background: orange;
+    outline: none;
+    border: none;
+}

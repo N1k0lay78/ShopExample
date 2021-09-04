@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="icon" href="/static/img/resource/icon.jpg">
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
+    {% block links %}
+    {% endblock %}
+</head>
+<body>
+<div class="navigation">
+    <div class="navigation-hrefs">
+        {% for page in data['pages_links'] %}
+        <a href="{{page[0]}}">{{page[1]}}</a>
+        {% endfor %}
+    </div>
+</div>
+<header class="header-menu">
+    <a href="/"><img class="header-menu-logo" src="/static/img/resource/icon.jpg" alt="logo"></a>
+    <div id="burger">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</header>
+<main>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</main>
+<footer class="footer-menu">
+    <p>Контакты контактируют, так и живём</p>
+</footer>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/base.js"></script>
+</body>
+</html>
