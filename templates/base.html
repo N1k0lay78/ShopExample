@@ -16,6 +16,15 @@
         {% for page in data['pages_links'] %}
         <a href="{{page[0]}}">{{page[1]}}</a>
         {% endfor %}
+        {% if logined %}
+        {% for page in data['logined_links'] %}
+        <a href="{{page[0]}}">{{page[1]}}</a>
+        {% endfor %}
+        {% else %}
+        {% for page in data['unlogined_links'] %}
+        <a href="{{page[0]}}">{{page[1]}}</a>
+        {% endfor %}
+        {% endif %}
     </div>
 </div>
 <header class="header-menu">

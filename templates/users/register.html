@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block links %}
+{% endblock %}
+
+{% block content %}
+<form action="" method="post">
+  <p>register</p>
+  {% if errors %}
+  <p>{{errors}}</p>
+  {% endif %}
+  {{ form.hidden_tag() }}
+  {{ form.name.label }}<br>
+  {{ form.name() }}<br>
+  {% for error in form.name.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.hidden_tag() }}
+  {{ form.email.label }}<br>
+  {{ form.email() }}<br>
+  {% for error in form.email.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.first_password.label }}<br>
+  {{ form.first_password() }}<br>
+  {% for error in form.first_password.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.repeat_password.label }}<br>
+  {{ form.repeat_password() }}<br>
+  {% for error in form.repeat_password.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.submit(type="submit", class="btn btn-primary submit") }}
+</form>
+{% endblock %}
