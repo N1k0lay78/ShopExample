@@ -1,0 +1,56 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<p>{{action}} item {{name}}</p>
+{% if error %}
+<p>{{error}}</p>
+{% endif %}
+<form action="" method="post" enctype=multipart/form-data>
+  {{ form.hidden_tag() }}
+
+  <input type="file" name="file">
+
+  {{ form.name.label }}<br>
+  {{ form.name() }}<br>
+  {% for error in form.name.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.short_description.label }}<br>
+  {{ form.short_description() }}<br>
+  {% for error in form.short_description.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.full_description.label }}<br>
+  {{ form.full_description() }}<br>
+  {% for error in form.full_description.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.price.label }}<br>
+  {{ form.price() }}<br>
+  {% for error in form.price.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.type_item.label }}<br>
+  {{ form.type_item() }}<br>
+  {% for error in form.type_item.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.cancel(value=form.cancel.label.text) }}<br>
+  {{ form.submit(value=form.submit.label.text) }}<br>
+</form>
+{% endblock %}

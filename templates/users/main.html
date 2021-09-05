@@ -6,15 +6,16 @@
 
 {% block content %}
 <div class="row">
-    {% for _ in range(4) %}
+    {% for item in items %}
     <div class="col-12 col-sm-6 col-md-6 col-lg-4 shop-item">
-        <a class="no-style" href="/item/{{_}}">
+        <a class="no-style" href="/item/{{item.id}}">
             <div class="shop-item-container">
-                <img class="shop-item-image" src="/static/img/item/item2.png" alt="item image">
-                <p class="shop-item-name">название длинное даже очень</p>
-                <p class="shop-item-description">описание товара должно быть здесь</p>
+                <img class="shop-item-image" src="/static/img/item/{{item.image}}" alt="item image">
+                <p class="shop-item-name">{{item.name}}</p>
+                <p class="shop-item-description">{{item.short_description}}</p>
+                <p class="shop-item-description">тип: {{item.type.type}}</p>
                 <div class="shop-item-nav">
-                    <span>5000p.</span>
+                    <span>{{item.price // 100}}.{{item.price % 100}} Р</span>
                     <button class="shop-item-buy">Купить</button>
                 </div>
             </div>

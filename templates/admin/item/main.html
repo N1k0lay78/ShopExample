@@ -1,0 +1,9 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<a href="/">to main</a>
+<p>items <a href="/admin/item/add/">add</a></p>
+{% for item in items %}
+<p>{{item.name}} {{item.price // 100}}.{{item.price % 100}} Р {{item.type.type}} <a href="/admin/item/change/{{item.id}}">change</a> <a href="/admin/item/delete/{{item.id}}">delete</a></p>
+{% endfor %}
+{% endblock %}

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Email, EqualTo
-from wtforms import StringField, SubmitField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, FloatField
 
 
 class YesNoFrom(FlaskForm):
@@ -36,3 +36,12 @@ class ChangeAminForm(AdminForm):
     first_password = PasswordField('Новый пароль', validators=[])
     repeat_password = PasswordField('Повторите пароль', validators=[EqualTo('first_password',
                                                                             message='Пароли не совпадают')])
+
+
+# items
+class ItemForm(AdminForm):
+    name = StringField('Название', validators=[DataRequired("Пожалуйста введите Название")])
+    short_description = StringField('Короткое описание', validators=[DataRequired("Пожалуйста введите Описание")])
+    full_description = StringField('Полное описание', validators=[DataRequired("Пожалуйста введите Описание")])
+    price = FloatField('Цена', validators=[DataRequired("Пожалуйста введите Цену")])
+    type_item = StringField('Тип товара', validators=[DataRequired("Пожалуйста введите Тип товара")])

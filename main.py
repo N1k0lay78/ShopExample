@@ -1,7 +1,11 @@
+import os
+from random import choice
 from flask import Flask, render_template, request
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
 from werkzeug.utils import redirect
 from data import db_session
+from data.item import Item
+from data.type import Type
 from data.user import User
 from data.form import *
 import config
@@ -11,6 +15,17 @@ app = Flask(__name__)
 app.config.from_object(config)
 login_manager = LoginManager()
 login_manager.init_app(app)
+let = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+
+
+def create_random_name(name_len):
+    return ''.join([choice(let) for _ in range(name_len)])
+
+
+def delete_img(path, filename):
+    if filename not in [""] and os.path.exists(path+filename):
+        os.remove(path+filename)
+
 
 data = {
     "pages_links": [
@@ -27,7 +42,8 @@ data = {
         ['/admin', 'панель администратора'],
     ],
     "admin_page": [
-        ['/admin', 'главная']
+        ['/admin', 'главная'],
+        ['/admin/item', 'товары'],
     ],
 }
 
@@ -195,7 +211,7 @@ def admin_change(id_admin, change_admin_from):
 def admin_change_page(id_admin):
     if current_user.access < 1:
         return redirect('/login')
-    if not upward_admin(current_user, id_admin):
+    if get_admin(id_admin) and not upward_admin(current_user, id_admin):
         return redirect('/admin')
     form = ChangeAminForm()
     error = ""
@@ -226,19 +242,172 @@ def admin_delete(id_admin):
 def admin_delete_page(id_admin):
     if current_user.access < 1:
         return redirect('/login')
-    if not upward_admin(current_user, id_admin):
+    if get_admin(id_admin) and not upward_admin(current_user, id_admin):
         return redirect('/admin')
     form = YesNoFrom()
     if request.method == 'POST':
         if form.submit.data:
             admin_delete(id_admin)
         return redirect('/admin')
-    return render_page('admin/admin/delete.html', 'Удалить админа', form=form, admin=get_admin(id_admin))
+    return render_page('admin/delete.html', 'Удалить админа', form=form, type='admin', name=get_admin(id_admin).name)
+
+
+def item():
+    session = db_session.create_session()
+    items = session.query(Item).all()
+    return items, session
+
+
+@app.route('/admin/item/', methods=['GET', 'POST'])
+@login_required
+def item_page():
+    if current_user.access < 1:
+        return redirect('/login')
+    items, session = item()
+    a = render_page('admin/item/main.html', 'Товары', items=items)
+    session.close()
+    return a
+
+
+def item_add(add_item_form, file):
+    session = db_session.create_session()
+    error = ""
+    if session.query(Item).filter(Item.name == add_item_form.name.data).first():
+        error = "Товар с таким именем уже существует"
+    elif not session.query(Type).filter(Type.type == add_item_form.type_item.data).first():
+        error = "нет такого типа товара"
+    else:
+        new_item = Item()
+        new_item.name = add_item_form.name.data
+        new_item.short_description = add_item_form.short_description.data
+        new_item.full_description = add_item_form.full_description.data
+        filename = f'{create_random_name(50)}.{file.filename.split(".")[-1]}'
+        file.save('static/img/item/'+filename)
+        new_item.image = filename
+        # print(float(add_item_form.price._value().replace(',', '.')), add_item_form.price)
+        new_item.price = int(float(add_item_form.price._value().replace(',', '.')) * 100)
+        new_item.type_id = session.query(Type).filter(Type.type == add_item_form.type_item.data).first().id
+        session.add(new_item)
+        session.commit()
+    session.close()
+    return error
+
+
+@app.route('/admin/item/add/', methods=['GET', 'POST'])
+@login_required
+def item_add_page():
+    if current_user.access < 1:
+        return redirect('/login')
+    form = ItemForm()
+    error = ""
+    if request.method == 'POST':
+        error = item_add(form, request.files['file'])
+        if error == "":
+            return redirect('/admin/item')
+    return render_page('admin/item/edit.html', 'Создать товар', form=form, action='create', name="", error=error)
+
+
+def get_item(id_item):
+    session = db_session.create_session()
+    searched_item = session.query(Item).get(id_item)
+    return searched_item, session
+
+
+def item_change(id_item, change_item_form, file):
+    session = db_session.create_session()
+    error = ""
+    change_item = session.query(Item).get(id_item)
+    if (session.query(Item).filter(Item.name == change_item_form.name.data).first() and
+            change_item_form.name.data != change_item.name):
+        error = "Товар с таким именем уже существует"
+    elif (not session.query(Type).filter(Type.type == change_item_form.type_item.data).first() and
+          change_item_form.type_item.data != change_item.type.type):
+        error = "нет такого типа товара"
+    else:
+        change_item.name = change_item_form.name.data
+        change_item.short_description = change_item_form.short_description.data
+        change_item.full_description = change_item_form.full_description.data
+        if file.filename != '':
+            delete_img('static/img/item/', change_item.image)
+            filename = f'{create_random_name(50)}.{file.filename.split(".")[-1]}'
+            file.save('static/img/item/'+filename)
+            print('change to ' + filename)
+            change_item.image = filename
+        change_item.price = int(float(change_item_form.price._value().replace(',', '.')) * 100)
+        change_item.type_id = session.query(Type).filter(Type.type == change_item_form.type_item.data).first().id
+        session.commit()
+    session.close()
+    return error
+
+
+@app.route('/admin/item/change/<int:id_item>', methods=['GET', 'POST'])
+@login_required
+def item_change_page(id_item):
+    if current_user.access < 1:
+        return redirect('/login')
+    form = ItemForm()
+    error = ""
+    if request.method == 'POST':
+        if form.submit.data:
+            error = item_change(id_item, form, request.files['file'])
+            if error == "":
+                return redirect('/admin/item')
+        else:
+            return redirect('/admin/item')
+    else:
+        searched_item, session = get_item(id_item)
+        form.name.data = searched_item.name
+        form.short_description.data = searched_item.short_description
+        form.short_description.data = searched_item.short_description
+        form.full_description.data = searched_item.full_description
+        form.price.data = f"{searched_item.price // 100}.{searched_item.price % 100}"
+        form.type_item.data = searched_item.type.type
+        session.close()
+    return render_page('admin/item/edit.html', 'Изменить предмет', form=form, action='edit',
+                       name=get_item_name(id_item), error=error)
+
+
+def get_item_name(id_item):
+    session = db_session.create_session()
+    searched_item = session.query(Item).get(id_item)
+    session.close()
+    return searched_item.name
+
+
+def item_delete(id_item):
+    session = db_session.create_session()
+    searched_item = session.query(Item).get(id_item)
+    delete_img('static/img/item/', searched_item.image)
+    session.delete(searched_item)
+    session.commit()
+    session.close()
+
+
+@app.route('/admin/item/delete/<int:id_item>', methods=['GET', 'POST'])
+@login_required
+def item_delete_page(id_item):
+    if current_user.access < 1:
+        return redirect('/login')
+    form = YesNoFrom()
+    if request.method == 'POST':
+        if form.submit.data:
+            item_delete(id_item)
+        return redirect('/admin/item')
+    return render_page('admin/delete.html', 'Удалить админа', form=form, type='item', name=get_item_name(id_item))
+
+
+def main():
+    session = db_session.create_session()
+    items = session.query(Item).all()
+    return items, session
 
 
 @app.route('/')
 def main_page():
-    return render_page('users/main.html', 'Главная')
+    items, session = main()
+    a = render_page('users/main.html', 'Главная', items=items)
+    session.close()
+    return a
 
 
 if __name__ == '__main__':
