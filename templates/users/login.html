@@ -6,6 +6,9 @@
 {% block content %}
 <form action="" method="post">
     <p>login</p>
+    {% if error %}
+    <p>{{error}}</p>
+    {% endif %}
     {{ form.hidden_tag() }}
     {{ form.email.label }}<br>
     {{ form.email() }}<br>
@@ -26,5 +29,6 @@
     {{ form.remember() }}{{ form.remember.label }}<br>
 
     {{ form.submit(type="submit", class="btn btn-primary submit") }}
+    <a href="/register">Зарегестрироваться</a>
 </form>
 {% endblock %}

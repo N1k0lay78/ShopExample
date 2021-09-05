@@ -6,8 +6,8 @@
 {% block content %}
 <form action="" method="post">
   <p>register</p>
-  {% if errors %}
-  <p>{{errors}}</p>
+  {% if error %}
+  <p>{{error}}</p>
   {% endif %}
   {{ form.hidden_tag() }}
   {{ form.name.label }}<br>

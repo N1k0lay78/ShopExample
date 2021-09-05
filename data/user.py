@@ -10,6 +10,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     nickname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    access = sqlalchemy.Column(sqlalchemy.Integer, nullable=True, default=0)  # 0 - user, 1 - admin, 2 - owner
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     def __repr__(self):

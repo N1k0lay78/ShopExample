@@ -16,12 +16,17 @@
         {% for page in data['pages_links'] %}
         <a href="{{page[0]}}">{{page[1]}}</a>
         {% endfor %}
-        {% if logined %}
+        {% if is_logined %}
         {% for page in data['logined_links'] %}
         <a href="{{page[0]}}">{{page[1]}}</a>
         {% endfor %}
         {% else %}
         {% for page in data['unlogined_links'] %}
+        <a href="{{page[0]}}">{{page[1]}}</a>
+        {% endfor %}
+        {% endif %}
+        {% if is_admin %}
+        {% for page in data['admin_links'] %}
         <a href="{{page[0]}}">{{page[1]}}</a>
         {% endfor %}
         {% endif %}
@@ -39,10 +44,12 @@
     </div>
 </header>
 <main>
+    {% block main %}
     <div class="container">
         {% block content %}
         {% endblock %}
     </div>
+    {% endblock %}
 </main>
 <footer class="footer-menu">
     <p>Контакты контактируют, так и живём</p>
