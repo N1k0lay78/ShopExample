@@ -1,0 +1,10 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<p>delete admin {{admin.nickname}}!</p>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.cancel(value=form.cancel.label.text) }}<br>
+    {{ form.submit(value=form.submit.label.text) }}<br>
+</form>
+{% endblock %}

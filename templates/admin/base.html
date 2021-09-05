@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block base_links %}
+<link href="/static/css/admin-base.css" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+<div class="admin-panel">
+    <div class="admin-navigation">
+        {% for admin_page in data['admin_page'] %}
+        <a href="{{admin_page[0]}}">{{admin_page[1]}}</a>
+        {% endfor %}
+    </div>
+    <div class="admin-content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

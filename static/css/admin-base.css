@@ -1,0 +1,13 @@
+.admin-panel {
+    display: flex;
+    min-height: 100%;
+}
+
+.admin-navigation {
+    padding-right: 10px;
+    border-right: 1px solid black;
+}
+
+.admin-content {
+    padding-left: 10px;
+}

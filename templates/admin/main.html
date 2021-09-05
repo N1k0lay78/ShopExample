@@ -1,10 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'admin/base.html' %}
 
-{% block links %}
-<link href="/static/css/main-page.css" rel="stylesheet">
-{% endblock %}
-
-{% block main %}
-<p>hello admin '{{admin.nickname}}'!</p>
+{% block content %}
+<p>hello admin '{{current_admin.nickname}}'!</p>
 <a href="/">to main</a>
+<p>admins <a href="/admin/admin/register/">add</a></p>
+{% for admin in admins %}
+    {% if current_admin == admin %}
+    <p>YOU</p>
+    {% else %}
+<p>{{admin.nickname}} {{admin.email}} {% if admin.access == 1 %} admin {% if current_admin.access > admin.access%}<a href="/admin/admin/change/{{admin.id}}">change</a> <a href="/admin/admin/delete/{{admin.id}}">delete</a>{% endif %}{% else %} owner {% endif %}</p>
+    {% endif %}
+{% endfor %}
 {% endblock %}

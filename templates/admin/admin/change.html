@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<p>change admin {{admin.nickname}}!</p>
+{% if error %}
+<p>{{error}}</p>
+{% endif %}
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+  {{ form.name.label }}<br>
+  {{ form.name() }}<br>
+  {% for error in form.name.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.email.label }}<br>
+  {{ form.email() }}<br>
+  {% for error in form.email.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  <p>Введите пароль если хотите изменить</p>
+
+  {{ form.first_password.label }}<br>
+  {{ form.first_password() }}<br>
+  {% for error in form.first_password.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.repeat_password.label }}<br>
+  {{ form.repeat_password() }}<br>
+  {% for error in form.repeat_password.errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endfor %}
+
+  {{ form.cancel(value=form.cancel.label.text) }}<br>
+  {{ form.submit(value=form.submit.label.text) }}<br>
+</form>
+{% endblock %}

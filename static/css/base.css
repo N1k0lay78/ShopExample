@@ -23,6 +23,7 @@ header {
 }
 
 main {
+    display: flex;
     flex: 1 1;
 }
 

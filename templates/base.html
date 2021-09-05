@@ -7,6 +7,8 @@
     <title>{{title}}</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/base.css" rel="stylesheet">
+    {% block base_links %}
+    {% endblock %}
     {% block links %}
     {% endblock %}
 </head>
@@ -16,12 +18,12 @@
         {% for page in data['pages_links'] %}
         <a href="{{page[0]}}">{{page[1]}}</a>
         {% endfor %}
-        {% if is_logined %}
-        {% for page in data['logined_links'] %}
+        {% if authorized %}
+        {% for page in data['authorized_links'] %}
         <a href="{{page[0]}}">{{page[1]}}</a>
         {% endfor %}
         {% else %}
-        {% for page in data['unlogined_links'] %}
+        {% for page in data['unauthorized_links'] %}
         <a href="{{page[0]}}">{{page[1]}}</a>
         {% endfor %}
         {% endif %}
